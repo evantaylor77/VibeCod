@@ -10,15 +10,78 @@ const isDev = process.env.NODE_ENV === 'development';
 const appRoot = isDev ? path.join(__dirname, '..') : process.resourcesPath;
 
 let mainWindow;
-let Store;
 let store;
 
+// Simple file-based store fallback
+class FileStore {
+  constructor(name, defaults = {}) {
+    const configDir = path.join(os.homedir(), '.vibecod');
+    if (!fs.existsSync(configDir)) {
+      fs.mkdirSync(configDir, { recursive: true });
+    }
+    this.filePath = path.join(configDir, `${name}.json`);
+    this.defaults = defaults;
+    this.data = this.load();
+  }
+
+  load() {
+    try {
+      if (fs.existsSync(this.filePath)) {
+        return { ...this.defaults, ...JSON.parse(fs.readFileSync(this.filePath, 'utf8')) };
+      }
+    } catch (e) {
+      console.error('Error loading store:', e);
+    }
+    return { ...this.defaults };
+  }
+
+  save() {
+    try {
+      fs.writeFileSync(this.filePath, JSON.stringify(this.data, null, 2), 'utf8');
+    } catch (e) {
+      console.error('Error saving store:', e);
+    }
+  }
+
+  get(key) {
+    return this.data[key];
+  }
+
+  set(key, value) {
+    this.data[key] = value;
+    this.save();
+  }
+
+  delete(key) {
+    delete this.data[key];
+    this.save();
+  }
+}
+
 async function initStore() {
-  const { default: ElectronStore } = await import('electron-store');
-  Store = ElectronStore;
-  store = new Store({
-    name: 'vibeforge-config',
-    defaults: {
+  try {
+    // Try to use electron-store if available
+    const { default: ElectronStore } = await import('electron-store');
+    store = new ElectronStore({
+      name: 'vibecod-config',
+      defaults: {
+        installedServers: {},
+        selectedIDEs: ['cursor'],
+        aiConfig: null,
+        projects: [],
+        snippets: [],
+        appState: {
+          activeTab: 'dashboard',
+          sidebarCollapsed: false,
+          theme: 'dark'
+        }
+      }
+    });
+    console.log('Using electron-store');
+  } catch (e) {
+    // Fallback to file-based store
+    console.log('Using file-based store fallback');
+    store = new FileStore('vibecod-config', {
       installedServers: {},
       selectedIDEs: ['cursor'],
       aiConfig: null,
@@ -29,11 +92,15 @@ async function initStore() {
         sidebarCollapsed: false,
         theme: 'dark'
       }
-    }
-  });
+    });
+  }
 }
 
 function createWindow() {
+  // Get icon path if it exists
+  const iconPath = path.join(appRoot, 'public', 'icon.ico');
+  const hasIcon = fs.existsSync(iconPath);
+
   mainWindow = new BrowserWindow({
     width: 1600,
     height: 1000,
@@ -42,7 +109,8 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      preload: path.join(__dirname, 'preload.js')
+      preload: path.join(__dirname, 'preload.js'),
+      webSecurity: false
     },
     titleBarStyle: 'hidden',
     titleBarOverlay: {
@@ -52,16 +120,26 @@ function createWindow() {
     },
     backgroundColor: '#09090b',
     show: false,
-    icon: path.join(__dirname, '../public/icon.ico')
+    ...(hasIcon ? { icon: iconPath } : {})
   });
 
   if (isDev) {
     mainWindow.loadURL('http://localhost:3000');
     mainWindow.webContents.openDevTools();
   } else {
-    // Load from the out directory (in resources/app when packaged)
+    // Load from the out directory
     const indexPath = path.join(appRoot, 'out', 'index.html');
     console.log('Loading from:', indexPath);
+    console.log('File exists:', fs.existsSync(indexPath));
+    
+    if (!fs.existsSync(indexPath)) {
+      console.error('index.html not found at:', indexPath);
+      console.log('App root contents:', fs.readdirSync(appRoot));
+      dialog.showErrorBox('Error', 'Application files not found. Please reinstall.');
+      app.quit();
+      return;
+    }
+    
     mainWindow.loadFile(indexPath);
   }
 
@@ -75,8 +153,14 @@ function createWindow() {
 }
 
 app.whenReady().then(async () => {
-  await initStore();
-  createWindow();
+  try {
+    await initStore();
+    createWindow();
+  } catch (error) {
+    console.error('Failed to initialize app:', error);
+    dialog.showErrorBox('Startup Error', `Failed to start VibeCod: ${error.message}`);
+    app.quit();
+  }
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
