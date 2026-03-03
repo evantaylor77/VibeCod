@@ -46,11 +46,23 @@ jobs:
           path: VibeCod/dist/VibeCod*.exe
           if-no-files-found: ignore
 
-      - name: Upload unpacked artifact
+      - name: Upload unpacked artifact (Double-click to run)
         uses: actions/upload-artifact@v4
         with:
-          name: VibeCod-Unpacked
+          name: VibeCod-Portable-Folder
           path: VibeCod/dist/win-unpacked/
+          if-no-files-found: ignore
+
+      - name: Zip unpacked for easy download
+        working-directory: ./VibeCod/dist
+        run: |
+          powershell Compress-Archive -Path win-unpacked\* -DestinationPath VibeCod-Windows-Portable.zip
+
+      - name: Upload zipped portable
+        uses: actions/upload-artifact@v4
+        with:
+          name: VibeCod-Windows-Portable-Zip
+          path: VibeCod/dist/VibeCod-Windows-Portable.zip
           if-no-files-found: ignore
 
   release:
