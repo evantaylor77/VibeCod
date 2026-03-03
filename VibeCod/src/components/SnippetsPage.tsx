@@ -42,7 +42,7 @@ export function SnippetsPage() {
     addSnippet({
       name: 'Sample Snippet',
       description: 'A sample code snippet',
-      code: `function greet(name: string) {\n  return `Hello, ${name}!`;\n}`,
+      code: "function greet(name: string) {\n  return 'Hello, ' + name + '!';\n}",
       language: 'TypeScript',
       tags: ['utility', 'sample'],
     });
