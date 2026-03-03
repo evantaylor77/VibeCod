@@ -66,6 +66,7 @@
   "build": {
     "appId": "com.vibecod.app",
     "productName": "VibeCod",
+    "asar": false,
     "directories": {
       "output": "dist"
     },

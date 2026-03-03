@@ -6,6 +6,9 @@ const os = require('os');
 
 const isDev = process.env.NODE_ENV === 'development';
 
+// Get the app root directory (different in dev vs packaged)
+const appRoot = isDev ? path.join(__dirname, '..') : process.resourcesPath;
+
 let mainWindow;
 let Store;
 let store;
@@ -56,7 +59,10 @@ function createWindow() {
     mainWindow.loadURL('http://localhost:3000');
     mainWindow.webContents.openDevTools();
   } else {
-    mainWindow.loadURL(`file://${path.join(__dirname, '../out/index.html')}`);
+    // Load from the out directory (in resources/app when packaged)
+    const indexPath = path.join(appRoot, 'out', 'index.html');
+    console.log('Loading from:', indexPath);
+    mainWindow.loadFile(indexPath);
   }
 
   mainWindow.once('ready-to-show', () => {
