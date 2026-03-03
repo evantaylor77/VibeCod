@@ -1,4 +1,0 @@
-C:\Users\Administrator\PycharmProjects\MCPMarket bu projeyi sadece okumak için kullanacaksın.
-buradaki gibi ama 10 kat daha iyi bir arayüz tasarlamanı istiyorum. 
-
-Bu program vibe coder'ların işlerini çok kolaylaştıran bir tıkla 100 kat verimlilik doğruluk kazandıracak projelerini hızlandıracak kalitelileştirecek bir proje olacak arayüzü ona göre tasarlarsın
