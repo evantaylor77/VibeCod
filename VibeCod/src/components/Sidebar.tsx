@@ -10,6 +10,7 @@ import {
   Server,
   Brain,
   Code2,
+  Wand2,
   Wrench,
   Settings,
   Zap,
@@ -32,6 +33,7 @@ const navItems: NavItem[] = [
   { id: 'mcp', label: 'MCP Servers', icon: Server },
   { id: 'ai', label: 'AI Models', icon: Brain },
   { id: 'snippets', label: 'Snippets', icon: Code2 },
+  { id: 'refactoring', label: 'Refactoring', icon: Wand2 },
   { id: 'tools', label: 'Tools', icon: Wrench },
   { id: 'settings', label: 'Settings', icon: Settings },
 ];

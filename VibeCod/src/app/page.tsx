@@ -9,6 +9,7 @@ import { ProjectsPage } from '@/components/ProjectsPage';
 import { MCPPage } from '@/components/MCPPage';
 import { AIPage } from '@/components/AIPage';
 import { SnippetsPage } from '@/components/SnippetsPage';
+import { RefactoringPage } from '@/components/RefactoringPage';
 import { ToolsPage } from '@/components/ToolsPage';
 import { SettingsPage } from '@/components/SettingsPage';
 import { Zap } from 'lucide-react';
@@ -66,6 +67,7 @@ const pageComponents = {
   mcp: MCPPage,
   ai: AIPage,
   snippets: SnippetsPage,
+  refactoring: RefactoringPage,
   tools: ToolsPage,
   settings: SettingsPage,
 };

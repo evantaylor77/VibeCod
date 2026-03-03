@@ -121,7 +121,7 @@ export interface ProjectSettings {
   customPrompts?: string[];
 }
 
-export type AppTab = 'dashboard' | 'projects' | 'mcp' | 'ai' | 'snippets' | 'tools' | 'settings';
+export type AppTab = 'dashboard' | 'projects' | 'mcp' | 'ai' | 'snippets' | 'refactoring' | 'tools' | 'settings';
 
 export interface AppState {
   activeTab: AppTab;
