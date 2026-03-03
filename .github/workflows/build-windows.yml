@@ -32,7 +32,7 @@ jobs:
 
       - name: List dist contents
         working-directory: ./VibeCod
-        run: dir dist /s
+        run: Get-ChildItem -Path dist -Recurse
 
       - name: Upload installer
         uses: actions/upload-artifact@v4
