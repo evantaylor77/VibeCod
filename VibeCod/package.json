@@ -4,13 +4,18 @@
   "description": "VibeCod - Ultimate Vibe Coding Assistant for Maximum Productivity",
   "main": "electron/main.js",
   "homepage": "./",
+  "author": "evantaylor77",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/evantaylor77/VibeCod.git"
+  },
   "scripts": {
     "dev": "concurrently \"npm run next:dev\" \"wait-on http://localhost:3000 && npm run electron:dev\"",
     "next:dev": "next dev",
     "electron:dev": "cross-env NODE_ENV=development electron .",
     "build": "next build && npm run electron:build",
     "next:build": "next build",
-    "electron:build": "electron-builder build --win",
+    "electron:build": "electron-builder build --win --publish=never",
     "electron:build:portable": "electron-builder build --win portable",
     "lint": "next lint",
     "typecheck": "tsc --noEmit"
