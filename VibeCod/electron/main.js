@@ -7,7 +7,10 @@ const os = require('os');
 const isDev = process.env.NODE_ENV === 'development';
 
 // Get the app root directory (different in dev vs packaged)
-const appRoot = isDev ? path.join(__dirname, '..') : process.resourcesPath;
+// When asar is false, files are in resources/app/, when true they're in resources/
+const appRoot = isDev 
+  ? path.join(__dirname, '..') 
+  : path.join(process.resourcesPath, 'app');
 
 let mainWindow;
 let store;
@@ -130,12 +133,28 @@ function createWindow() {
     // Load from the out directory
     const indexPath = path.join(appRoot, 'out', 'index.html');
     console.log('Loading from:', indexPath);
+    console.log('App root:', appRoot);
+    console.log('Resources path:', process.resourcesPath);
+    console.log('__dirname:', __dirname);
     console.log('File exists:', fs.existsSync(indexPath));
     
     if (!fs.existsSync(indexPath)) {
       console.error('index.html not found at:', indexPath);
-      console.log('App root contents:', fs.readdirSync(appRoot));
-      dialog.showErrorBox('Error', 'Application files not found. Please reinstall.');
+      
+      // Debug: Check what's in different directories
+      try {
+        console.log('App root contents:', fs.readdirSync(appRoot));
+      } catch (e) {
+        console.log('Cannot read appRoot:', e.message);
+      }
+      
+      try {
+        console.log('Resources path contents:', fs.readdirSync(process.resourcesPath));
+      } catch (e) {
+        console.log('Cannot read resourcesPath:', e.message);
+      }
+      
+      dialog.showErrorBox('Error', 'Application files not found at: ' + indexPath + '\n\nPlease reinstall.');
       app.quit();
       return;
     }
