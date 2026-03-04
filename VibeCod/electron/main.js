@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, shell, dialog } = require('electron');
+const { app, BrowserWindow, ipcMain, shell, dialog, protocol } = require('electron');
 const path = require('path');
 const { spawn, exec } = require('child_process');
 const fs = require('fs');
@@ -7,10 +7,9 @@ const os = require('os');
 const isDev = process.env.NODE_ENV === 'development';
 
 // Get the app root directory (different in dev vs packaged)
-// When asar is false, files are in resources/app/, when true they're in resources/
-const appRoot = isDev 
-  ? path.join(__dirname, '..') 
-  : path.join(process.resourcesPath, 'app');
+const appRoot = isDev
+  ? path.join(__dirname, '..')
+  : process.resourcesPath || path.join(__dirname, '..');
 
 let mainWindow;
 let store;
@@ -99,21 +98,56 @@ async function initStore() {
   }
 }
 
+// Register custom protocol for serving static files
+function registerProtocol() {
+  protocol.registerBufferProtocol('app', (request, callback) => {
+    const requestPath = request.url.substr(7); // Remove 'app://'
+    const filePath = path.join(appRoot, 'out', requestPath);
+    
+    fs.readFile(filePath, (err, data) => {
+      if (err) {
+        console.error('Failed to read file:', filePath, err);
+        callback({ error: -2 }); // Cannot find file
+      } else {
+        // Determine mime type
+        let mimeType = 'text/html';
+        if (filePath.endsWith('.js')) mimeType = 'application/javascript';
+        else if (filePath.endsWith('.css')) mimeType = 'text/css';
+        else if (filePath.endsWith('.json')) mimeType = 'application/json';
+        else if (filePath.endsWith('.png')) mimeType = 'image/png';
+        else if (filePath.endsWith('.jpg') || filePath.endsWith('.jpeg')) mimeType = 'image/jpeg';
+        else if (filePath.endsWith('.svg')) mimeType = 'image/svg+xml';
+        else if (filePath.endsWith('.ico')) mimeType = 'image/x-icon';
+        else if (filePath.endsWith('.woff')) mimeType = 'font/woff';
+        else if (filePath.endsWith('.woff2')) mimeType = 'font/woff2';
+        else if (filePath.endsWith('.ttf')) mimeType = 'font/ttf';
+        
+        callback({
+          data,
+          mimeType
+        });
+      }
+    });
+  });
+}
+
 function createWindow() {
   // Get icon path if it exists
   const iconPath = path.join(appRoot, 'public', 'icon.ico');
   const hasIcon = fs.existsSync(iconPath);
 
   mainWindow = new BrowserWindow({
-    width: 1600,
-    height: 1000,
-    minWidth: 1200,
-    minHeight: 800,
+    width: 1400,
+    height: 900,
+    minWidth: 1000,
+    minHeight: 700,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
       preload: path.join(__dirname, 'preload.js'),
-      webSecurity: false
+      webSecurity: true,
+      sandbox: false,
+      backgroundThrottling: false
     },
     titleBarStyle: 'hidden',
     titleBarOverlay: {
@@ -128,38 +162,23 @@ function createWindow() {
 
   if (isDev) {
     mainWindow.loadURL('http://localhost:3000');
+    // Only open DevTools in development
     mainWindow.webContents.openDevTools();
   } else {
-    // Load from the out directory
-    const indexPath = path.join(appRoot, 'out', 'index.html');
-    console.log('Loading from:', indexPath);
+    // Load using custom protocol
+    console.log('Loading from app://index.html');
     console.log('App root:', appRoot);
     console.log('Resources path:', process.resourcesPath);
-    console.log('__dirname:', __dirname);
-    console.log('File exists:', fs.existsSync(indexPath));
     
+    const indexPath = path.join(appRoot, 'out', 'index.html');
     if (!fs.existsSync(indexPath)) {
       console.error('index.html not found at:', indexPath);
-      
-      // Debug: Check what's in different directories
-      try {
-        console.log('App root contents:', fs.readdirSync(appRoot));
-      } catch (e) {
-        console.log('Cannot read appRoot:', e.message);
-      }
-      
-      try {
-        console.log('Resources path contents:', fs.readdirSync(process.resourcesPath));
-      } catch (e) {
-        console.log('Cannot read resourcesPath:', e.message);
-      }
-      
-      dialog.showErrorBox('Error', 'Application files not found at: ' + indexPath + '\n\nPlease reinstall.');
+      dialog.showErrorBox('Error', 'Application files not found. Please reinstall.');
       app.quit();
       return;
     }
     
-    mainWindow.loadFile(indexPath);
+    mainWindow.loadURL('app://index.html');
   }
 
   mainWindow.once('ready-to-show', () => {
@@ -172,6 +191,11 @@ function createWindow() {
 }
 
 app.whenReady().then(async () => {
+  // Register custom protocol before creating windows
+  if (!isDev) {
+    registerProtocol();
+  }
+  
   try {
     await initStore();
     createWindow();
