@@ -1,3 +1,4 @@
+5s
 Run npm run build
   npm run build
   shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
@@ -5,12 +6,37 @@ Run npm run build
 > vibecod@1.0.0 build
 > next build
 
+⚠ No build cache found. Please configure build caching for faster rebuilds. Read more: https://nextjs.org/docs/messages/no-cache
+Attention: Next.js now collects completely anonymous telemetry regarding usage.
+This information is used to shape Next.js' roadmap and prioritize features.
+You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+https://nextjs.org/telemetry
 
-> Build error occurred
-Error: Configuring Next.js via 'next.config.ts' is not supported. Please replace the file with 'next.config.js' or 'next.config.mjs'.
-    at loadConfig (D:\a\VibeCod\VibeCod\node_modules\next\dist\server\config.js:787:19)
-    at async Span.traceAsyncFn (D:\a\VibeCod\VibeCod\node_modules\next\dist\trace\trace.js:154:20)
-    at async D:\a\VibeCod\VibeCod\node_modules\next\dist\build\index.js:372:28
-    at async Span.traceAsyncFn (D:\a\VibeCod\VibeCod\node_modules\next\dist\trace\trace.js:154:20)
-    at async build (D:\a\VibeCod\VibeCod\node_modules\next\dist\build\index.js:366:9)
+  ▲ Next.js 14.2.0
+
+   Creating an optimized production build ...
+Failed to compile.
+
+./src/app/page.tsx
+Module not found: Can't resolve '@/components/Sidebar'
+
+https://nextjs.org/docs/messages/module-not-found
+
+./src/app/page.tsx
+Module not found: Can't resolve '@/components/RefactoringPage'
+
+https://nextjs.org/docs/messages/module-not-found
+
+./src/app/page.tsx
+Module not found: Can't resolve '@/components/SecurityPage'
+
+https://nextjs.org/docs/messages/module-not-found
+
+./src/app/page.tsx
+Module not found: Can't resolve '@/components/MCPPage'
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+> Build failed because of webpack errors
 Error: Process completed with exit code 1.
