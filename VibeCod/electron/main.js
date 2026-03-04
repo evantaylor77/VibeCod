@@ -7,9 +7,10 @@ const os = require('os');
 const isDev = process.env.NODE_ENV === 'development';
 
 // Get the app root directory (different in dev vs packaged)
+// With asar:false, files are at: resources/app/
 const appRoot = isDev
   ? path.join(__dirname, '..')
-  : process.resourcesPath || path.join(__dirname, '..');
+  : path.join(process.resourcesPath, 'app');
 
 let mainWindow;
 let store;

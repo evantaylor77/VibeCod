@@ -66,7 +66,7 @@
   "build": {
     "appId": "com.vibecod.app",
     "productName": "VibeCod",
-    "asar": true,
+    "asar": false,
     "directories": {
       "output": "dist"
     },
@@ -75,12 +75,6 @@
       "out/**/*",
       "public/icon.ico",
       "package.json"
-    ],
-    "extraResources": [
-      {
-        "from": "node_modules/electron-store",
-        "to": "node_modules/electron-store"
-      }
     ],
     "win": {
       "target": [
