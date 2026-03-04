@@ -1,3 +1,5 @@
+import './globals.css';
+
 export const metadata = {
   title: 'VibeCod',
   description: 'AI-powered development environment',
