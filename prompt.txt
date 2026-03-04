@@ -1,0 +1,1 @@
+Dependencies lock file is not found in D:\a\VibeCod\VibeCod. Supported file patterns: package-lock.json,npm-shrinkwrap.json,yarn.lock

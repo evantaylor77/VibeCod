@@ -18,10 +18,9 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '20'
-        cache: 'npm'
     
     - name: Install dependencies
-      run: npm ci
+      run: npm install
     
     - name: Build Next.js
       run: npm run build
@@ -31,11 +30,13 @@ jobs:
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
+    - name: List dist contents
+      run: dir dist /s
+      shell: cmd
+    
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
         name: VibeCod-Windows
-        path: |
-          dist/*.exe
-          dist/win-unpacked/
+        path: dist/
         if-no-files-found: warn
