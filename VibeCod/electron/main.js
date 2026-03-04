@@ -166,8 +166,8 @@ function createWindow() {
     // Only open DevTools in development
     mainWindow.webContents.openDevTools();
   } else {
-    // Load using custom protocol
-    console.log('Loading from app://index.html');
+    // Load static export directly from disk for maximum compatibility.
+    console.log('Loading from exported index.html');
     console.log('App root:', appRoot);
     console.log('Resources path:', process.resourcesPath);
     
@@ -178,9 +178,17 @@ function createWindow() {
       app.quit();
       return;
     }
-    
-    mainWindow.loadURL('app://index.html');
+
+    mainWindow.loadFile(indexPath).catch((error) => {
+      console.error('Failed to load renderer:', error);
+      dialog.showErrorBox('Startup Error', `Renderer could not be loaded: ${error.message}`);
+      app.quit();
+    });
   }
+
+  mainWindow.webContents.on('did-fail-load', (_event, errorCode, errorDescription, validatedURL) => {
+    console.error('Renderer did-fail-load:', { errorCode, errorDescription, validatedURL });
+  });
 
   mainWindow.once('ready-to-show', () => {
     mainWindow.show();

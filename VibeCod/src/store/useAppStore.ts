@@ -85,7 +85,7 @@ export const useAppStore = create<AppStore>()(
       installedServers: {},
       projects: [],
       snippets: [],
-      activeTab: 'refactoring',
+      activeTab: 'dashboard',
       sidebarCollapsed: false,
       searchQuery: '',
       selectedTags: [],

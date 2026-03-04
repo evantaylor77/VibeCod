@@ -12,8 +12,9 @@ import {
   Brain,
   ArrowRight,
   Sparkles,
+  Wand2,
+  PlugZap,
   TrendingUp,
-  Clock,
   Plus,
   ExternalLink,
 } from 'lucide-react';
@@ -248,9 +249,16 @@ export function DashboardPage() {
             <QuickAction
               icon={Server}
               label="Install MCP Server"
-              description="Add a new MCP server to your workspace"
+              description="Install individual servers and manage env vars"
               onClick={() => setActiveTab('mcp')}
               color="blue"
+            />
+            <QuickAction
+              icon={PlugZap}
+              label="One-Click MCP Pack"
+              description="Install a curated MCP stack and sync IDE configs"
+              onClick={() => setActiveTab('mcp')}
+              color="purple"
             />
             <QuickAction
               icon={Code2}
@@ -260,11 +268,11 @@ export function DashboardPage() {
               color="green"
             />
             <QuickAction
-              icon={Brain}
-              label="Configure AI"
-              description="Set up AI models and preferences"
-              onClick={() => setActiveTab('ai')}
-              color="purple"
+              icon={Wand2}
+              label="Run Refactoring"
+              description="Apply one-click safe cleanup and modernization"
+              onClick={() => setActiveTab('refactoring')}
+              color="primary"
             />
           </div>
         </motion.div>
