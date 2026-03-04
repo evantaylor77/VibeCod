@@ -1,6 +1,6 @@
 'use client';
 
-import { Tab, tabs } from '@/app/page';
+import { tabs, type Tab } from '@/types';
 
 interface SidebarProps {
   activeTab: Tab;

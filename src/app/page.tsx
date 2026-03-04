@@ -1,19 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { GitBranch, Shield, Zap, Sparkles } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 import Sidebar from '@/components/Sidebar';
 import RefactoringPage from '@/components/RefactoringPage';
 import SecurityPage from '@/components/SecurityPage';
 import MCPPage from '@/components/MCPPage';
-
-export type Tab = 'refactoring' | 'security' | 'mcp';
-
-export const tabs = [
-  { id: 'refactoring' as Tab, label: 'Refactoring', icon: GitBranch },
-  { id: 'security' as Tab, label: 'Project Security', icon: Shield },
-  { id: 'mcp' as Tab, label: 'One-Click MCP', icon: Zap },
-];
+import type { Tab } from '@/types';
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<Tab>('refactoring');

@@ -1,7 +1,5 @@
-5s
+13s
 Run npm run build
-  npm run build
-  shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
 
 > vibecod@1.0.0 build
 > next build
@@ -15,28 +13,20 @@ https://nextjs.org/telemetry
   ▲ Next.js 14.2.0
 
    Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
 Failed to compile.
 
-./src/app/page.tsx
-Module not found: Can't resolve '@/components/Sidebar'
+.next/types/app/page.ts:8:13
+Type error: Type 'OmitWithTag<typeof import("D:/a/VibeCod/VibeCod/src/app/page"), "metadata" | "default" | "config" | "generateStaticParams" | "revalidate" | "dynamic" | "dynamicParams" | "fetchCache" | "preferredRegion" | ... 4 more ... | "generateViewport", "">' does not satisfy the constraint '{ [x: string]: never; }'.
+  Property 'tabs' is incompatible with index signature.
+    Type '{ id: Tab; label: string; icon: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>; }[]' is not assignable to type 'never'.
 
-https://nextjs.org/docs/messages/module-not-found
-
-./src/app/page.tsx
-Module not found: Can't resolve '@/components/RefactoringPage'
-
-https://nextjs.org/docs/messages/module-not-found
-
-./src/app/page.tsx
-Module not found: Can't resolve '@/components/SecurityPage'
-
-https://nextjs.org/docs/messages/module-not-found
-
-./src/app/page.tsx
-Module not found: Can't resolve '@/components/MCPPage'
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-> Build failed because of webpack errors
+   6 |
+   7 | // Check that the entry is a valid entry
+>  8 | checkFields<Diff<{
+     |             ^
+   9 |   default: Function
+  10 |   config?: {}
+  11 |   generateStaticParams?: Function
 Error: Process completed with exit code 1.
