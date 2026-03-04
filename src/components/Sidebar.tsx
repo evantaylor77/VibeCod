@@ -9,14 +9,16 @@ interface SidebarProps {
 
 export default function Sidebar({ activeTab, onTabChange }: SidebarProps) {
   return (
-    <aside className="w-64 bg-[#12121a] border-r border-[#2a2a3a] flex flex-col">
-      <div className="p-4 border-b border-[#2a2a3a]">
-        <h2 className="text-xs font-semibold text-[#a0a0b0] uppercase tracking-wider">
-          Features
-        </h2>
+    <aside className="w-20 bg-[#15151c] border-r border-white/[0.06] flex flex-col items-center py-6 shrink-0">
+      {/* Logo */}
+      <div className="mb-8">
+        <div className="h-10 w-10 rounded-2xl bg-gradient-to-br from-[#6366f1] to-[#8b5cf6] flex items-center justify-center shadow-lg shadow-indigo-500/20">
+          <span className="text-white font-bold text-lg">V</span>
+        </div>
       </div>
-      
-      <nav className="flex-1 p-3 space-y-1">
+
+      {/* Navigation */}
+      <nav className="flex-1 flex flex-col gap-2">
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -25,27 +27,48 @@ export default function Sidebar({ activeTab, onTabChange }: SidebarProps) {
             <button
               key={tab.id}
               onClick={() => onTabChange(tab.id)}
-              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
-                isActive
-                  ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-900/20'
-                  : 'text-[#a0a0b0] hover:bg-[#1a1a25] hover:text-white'
-              }`}
+              className="group relative flex flex-col items-center gap-1.5 px-3 py-3 rounded-2xl transition-all duration-200"
+              title={tab.label}
             >
-              <Icon className={`h-4 w-4 ${isActive ? 'text-white' : 'text-[#606070]'}`} />
-              {tab.label}
+              {/* Active background */}
+              {isActive && (
+                <div className="absolute inset-0 bg-gradient-to-br from-[#6366f1]/20 to-[#8b5cf6]/20 rounded-2xl border border-[#6366f1]/30" />
+              )}
+              
+              {/* Hover background */}
+              <div className={`absolute inset-0 rounded-2xl transition-all duration-200 ${
+                !isActive && 'bg-white/[0.04] opacity-0 group-hover:opacity-100'
+              }`} />
+              
+              {/* Icon container */}
+              <div className={`relative z-10 p-2 rounded-xl transition-all duration-200 ${
+                isActive 
+                  ? 'bg-gradient-to-br from-[#6366f1] to-[#8b5cf6] text-white shadow-lg shadow-indigo-500/30' 
+                  : 'text-[#64748b] group-hover:text-[#94a3b8]'
+              }`}>
+                <Icon className="h-5 w-5" strokeWidth={isActive ? 2 : 1.5} />
+              </div>
+              
+              {/* Label */}
+              <span className={`relative z-10 text-[9px] font-medium transition-colors ${
+                isActive ? 'text-[#6366f1]' : 'text-[#64748b] group-hover:text-[#94a3b8]'
+              }`}>
+                {tab.shortLabel || tab.label}
+              </span>
+
+              {/* Active indicator dot */}
+              {isActive && (
+                <div className="absolute -right-1 top-1/2 -translate-y-1/2 w-1 h-8 rounded-full bg-gradient-to-b from-[#6366f1] to-[#8b5cf6]" />
+              )}
             </button>
           );
         })}
       </nav>
 
-      <div className="p-4 border-t border-[#2a2a3a]">
-        <div className="rounded-lg bg-[#1a1a25] p-3">
-          <p className="text-xs text-[#606070]">
-            VibeCod v1.0.0
-          </p>
-          <p className="text-xs text-[#505060] mt-1">
-            AI-Powered Dev
-          </p>
+      {/* Bottom section */}
+      <div className="mt-auto pt-4 border-t border-white/[0.06] w-full px-4">
+        <div className="flex items-center justify-center">
+          <div className="h-2 w-2 rounded-full bg-[#10b981] shadow-[0_0_8px_rgba(16,185,129,0.5)] animate-pulse" />
         </div>
       </div>
     </aside>
