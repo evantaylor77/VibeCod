@@ -33,3 +33,4 @@ yarn-error.log*
 # Project specific
 prompt.txt
 AGENTS.md
+.serena/
