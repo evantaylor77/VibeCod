@@ -2,8 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
-
 :root {
   --bg-base: #f4f6ef;
   --bg-elev: #ffffff;
@@ -35,7 +33,7 @@ body {
     radial-gradient(circle at 100% 100%, rgba(234, 88, 12, 0.12), transparent 40%),
     linear-gradient(160deg, #f8faf4 0%, #edf3e4 45%, #f6f2e7 100%);
   color: var(--ink);
-  font-family: 'IBM Plex Sans', 'Segoe UI', Tahoma, sans-serif;
+  font-family: 'Bahnschrift', 'Segoe UI', Tahoma, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -46,7 +44,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: 'Space Grotesk', 'IBM Plex Sans', sans-serif;
+  font-family: 'Bahnschrift', 'Trebuchet MS', sans-serif;
   letter-spacing: -0.01em;
   color: var(--ink-strong);
 }
